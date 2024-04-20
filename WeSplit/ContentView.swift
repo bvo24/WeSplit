@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var name = ""
+    let students = ["Lebron", "Bvo", "BigT"]
+    @State private var selectedStudent = "BigT"
     
     var body: some View {
         Form{
-            TextField("Enter your name", text: $name)
-            Text("Hello \(name)")
+            Picker("Select your student", selection: $selectedStudent){
+                // \.self basically is how we identify each one and in this case the string itself is how it identifies itself.
+                ForEach(students, id: \.self){
+                    Text($0)
+                }
+            }
+            
         }
+        .navigationTitle("Select a student")
     }
 }
 
