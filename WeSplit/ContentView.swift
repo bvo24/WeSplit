@@ -8,20 +8,67 @@
 import SwiftUI
 
 struct ContentView: View {
-    let students = ["Lebron", "Bvo", "BigT"]
-    @State private var selectedStudent = "BigT"
+    @State private var checkAmmount = 0.0
+    @State private var numberOfPeople = 2
+    @State private var tipPercentage = 20
+    
+    @FocusState private var amountIsFocused: Bool
+    
+    var totalPerPerson: Double{
+//         Calculate this value
+        let peopleCount = Double(numberOfPeople + 2)
+        let tipSelection = Double(tipPercentage)
+        
+        let tipValue = checkAmmount / 100 * tipSelection
+        let grandTotal = checkAmmount + tipValue
+        let amountPerPerson = grandTotal / peopleCount
+        
+        
+        return amountPerPerson
+    }
+    
+    let tipPercentages = [10, 15, 20, 25]
     
     var body: some View {
-        Form{
-            Picker("Select your student", selection: $selectedStudent){
-                // \.self basically is how we identify each one and in this case the string itself is how it identifies itself.
-                ForEach(students, id: \.self){
-                    Text($0)
+        NavigationStack{
+            Form{
+                Section{
+                    TextField("Check ammount", value: $checkAmmount, format: .currency(code: Locale.current.currency?.identifier ??  "USD"))
+                        .keyboardType(.decimalPad)
+                        .focused($amountIsFocused)
+                    
+                    Picker("Number of people", selection: $numberOfPeople){
+                        ForEach(2..<100){
+                            Text("\($0) people")
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
+                }
+                Section("How much do you want to tip?"){
+            
+                    Picker("Tip percentage", selection: $tipPercentage){
+                        ForEach(tipPercentages, id: \.self){
+                            Text("\($0) %")
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                
+                Section{
+                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ??  "USD") )
+                    
+                }
+                
+            }
+            .navigationTitle("WeSplit")
+            .toolbar{
+                if amountIsFocused{
+                    Button("Done"){
+                        amountIsFocused = false
+                    }
                 }
             }
-            
         }
-        .navigationTitle("Select a student")
     }
 }
 
