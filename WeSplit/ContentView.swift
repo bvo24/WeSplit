@@ -16,7 +16,7 @@ struct ContentView: View {
     
     var totalPerPerson: Double{
 //         Calculate this value
-//        I believe we did this because we had our initial value of 2 but it displayed 4
+//        I believe we did this because we had our initial value of 2 but it displayed 4 which messes up our default display value
         let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentage)
         
