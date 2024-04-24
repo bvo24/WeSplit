@@ -16,6 +16,7 @@ struct ContentView: View {
     
     var totalPerPerson: Double{
 //         Calculate this value
+//        I believe we did this because we had our initial value of 2 but it displayed 4
         let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentage)
         
@@ -25,6 +26,13 @@ struct ContentView: View {
         
         
         return amountPerPerson
+    }
+    
+    var grandTotal : Double{
+        let tipSelection = Double(tipPercentage) / 100 * checkAmmount
+        let grandTotal = Double(checkAmmount) + tipSelection
+        
+        return grandTotal
     }
     
     let tipPercentages = [10, 15, 20, 25]
@@ -47,14 +55,20 @@ struct ContentView: View {
                 Section("How much do you want to tip?"){
             
                     Picker("Tip percentage", selection: $tipPercentage){
-                        ForEach(tipPercentages, id: \.self){
+                        ForEach(0..<101){
                             Text("\($0) %")
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.navigationLink)
                 }
                 
-                Section{
+                Section("TOTAL + TIP"){
+                    Text(grandTotal,  format:
+                            .currency(code: Locale.current.currency?
+                                .identifier ?? "USD"))
+                }
+                
+                Section("Amount per person"){
                     Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ??  "USD") )
                     
                 }
